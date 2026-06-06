@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>حساب یار · یار محاسبات حرفه‌ای</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0A1F1A; font-family: 'Segoe UI', Tahoma, sans-serif; padding: 20px; }
+        .brand-container { max-width: 800px; margin: auto; background: #FEFBF6; border-radius: 48px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); overflow: hidden; border: 1px solid rgba(201, 160, 61, 0.4); }
+        .brand-header { background: #1E3A2F; padding: 20px 24px 16px; text-align: center; border-bottom: 3px solid #C9A03D; }
+        .logo-circle { 
+            width: 100px; 
+            height: 100px; 
+            margin: 0 auto 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            background: transparent; 
+            border-radius: 16px; 
+            overflow: hidden; 
+        }
+        .logo-circle img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+        }
+        .brand-name { font-size: 28px; font-weight: 800; letter-spacing: 4px; color: #C9A03D; text-transform: uppercase; margin-top: 6px; }
+        .brand-tagline { font-size: 12px; color: #E6D5A8; letter-spacing: 2px; margin-top: 8px; }
+        .inner-content { padding: 20px 24px 30px; }
+        .project-bar { background: #F4EFE6; padding: 12px 16px; border-radius: 60px; display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px; }
+        select, input, button { font-size: 0.9rem; padding: 8px 14px; border-radius: 40px; border: 1px solid #C9A03D; background: white; }
+        select { flex: 2; }
+        button { background: #C9A03D; color: #1E3A2F; font-weight: bold; border: none; cursor: pointer; transition: 0.2s; }
+        button:hover { background: #B58C2E; }
+        .btn-secondary { background: #556B5F; color: white; }
+        .btn-danger { background: #9E5A4A; color: white; }
+        .btn-success { background: #2C6E4F; color: white; }
+        .form-group { margin-bottom: 18px; }
+        label { font-weight: bold; display: block; margin-bottom: 6px; color: #1E3A2F; }
+        input, select { width: 100%; padding: 12px; border-radius: 28px; }
+        .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: 20px; margin-top: 15px; }
+        table { width: 100%; min-width: 420px; border-collapse: collapse; background: white; border-radius: 20px; overflow: hidden; }
+        th, td { padding: 10px 8px; text-align: right; border-bottom: 1px solid #E2D9CE; white-space: nowrap; }
+        th { background: #DCE8E1; }
+        .total { background: #E9E0D0; padding: 14px; border-radius: 36px; text-align: center; font-weight: bold; margin: 20px 0; border-right: 5px solid #C9A03D; }
+        .result { background: #FEF5E6; padding: 15px; border-radius: 28px; margin-top: 20px; display: none; border: 1px solid #C9A03D; }
+        .flex { display: flex; gap: 12px; flex-wrap: wrap; margin: 20px 0; }
+        button.icon-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; margin: 0 3px; color: #1E3A2F; }
+        .footer { text-align: center; font-size: 12px; color: #8B6B3D; border-top: 1px solid #DDD2C0; padding: 15px 20px; background: #F8F4ED; border-radius: 0 0 48px 48px; }
+        .footer a { color: #C9A03D; text-decoration: none; }
+        .license-card { background: linear-gradient(135deg, #FFE5B4 0%, #FFD966 100%); margin: 15px 20px; border-radius: 32px; padding: 15px 20px; }
+        .license-input-group { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+        .warning-box { background: #F9D56E; padding: 12px; border-radius: 28px; margin-bottom: 20px; text-align: center; font-weight: bold; }
+        .badge-free { background: #9E5A4A; color: white; padding: 4px 12px; border-radius: 30px; font-size: 11px; display: inline-block; margin-right: 10px; }
+        .badge-pro { background: #2C6E4F; color: white; padding: 4px 12px; border-radius: 30px; font-size: 11px; display: inline-block; margin-right: 10px; }
+        /* مودال راهنما */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); justify-content: center; align-items: center; }
+        .modal-content { background: #FEFBF6; margin: 20px; padding: 20px; border-radius: 48px; max-width: 500px; width: 90%; max-height: 80%; overflow-y: auto; direction: rtl; box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid #C9A03D; }
+        .modal-content h3 { color: #1E3A2F; margin-bottom: 15px; border-right: 4px solid #C9A03D; padding-right: 10px; }
+        .modal-content p, .modal-content li { font-size: 14px; color: #333; margin-bottom: 8px; line-height: 1.5; }
+        .modal-content ul { padding-right: 20px; }
+        .close-modal { float: left; font-size: 28px; font-weight: bold; cursor: pointer; color: #C9A03D; }
+        .close-modal:hover { color: #9E5A4A; }
+        .help-btn { background: none; border: none; color: #C9A03D; cursor: pointer; font-size: 12px; text-decoration: underline; padding: 0; margin: 0 5px; }
+    </style>
+</head>
+<body>
+<div class="brand-container" id="pdfCaptureArea">
+    <div class="brand-header">
+        <div class="logo-circle">
+            <!-- اینجا رشته Base64 لوگوی خودت را بگذار -->
+            <img src="data:image/png;base64,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" alt="حساب یار" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=font-size:52px;color:#C9A03D;>ح</div>'">
+        </div>
+        <div class="brand-name">حساب یار</div>
+        <div class="brand-tagline">همراه هوشمند محاسبات و مدیریت پروژه</div>
+    </div>
+
+    <div class="inner-content">
+        <div class="project-bar">
+            <select id="projectSelect"></select>
+            <button id="newProjectBtn">➕ جدید</button>
+            <button id="copyProjectBtn" class="btn-secondary">📋 کپی</button>
+            <button id="renameProjectBtn" class="btn-secondary">✏️ تغییر نام</button>
+            <button id="deleteProjectBtn" class="btn-danger">🗑️ حذف</button>
+        </div>
+
+        <div id="currentProjectName" style="font-weight:bold; margin-bottom:16px;"></div>
+
+        <div id="limitWarning" class="warning-box" style="display:none;">⚠️ نسخه رایگان فقط تا ۵ آیتم. برای فعال‌سازی کد بگیرید.</div>
+
+        <div style="background:#F8F4ED; border-radius: 32px; padding: 18px; margin-bottom: 28px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h3 style="margin:0;">➕ اضافه کردن متریال</h3>
+                <button id="calcToggleBtn" title="ماشین حساب" style="background:#1E3A2F;color:#C9A03D;border:none;border-radius:50%;width:38px;height:38px;font-size:18px;cursor:pointer;">🧮</button>
+            </div>
+
+            <!-- فیوریت‌ها -->
+            <div id="favoritesBar" style="margin-bottom:12px;"></div>
+
+            <div class="form-group"><label>نام :</label><input type="text" id="matName" placeholder="مثل ام دی اف"></div>
+            <div class="form-group"><label>واحد :</label><select id="unit"><option value="m2">متر مربع</option><option value="meter">متر طول</option><option value="piece">عدد</option></select></div>
+            <div class="form-group"><label>قیمت واحد :</label>
+                <div style="display:flex;gap:6px;">
+                    <input type="number" id="unitPrice" placeholder="450000" style="flex:1;">
+                    <button id="saveFavBtn" title="ذخیره در فیوریت‌ها" style="background:#C9A03D;color:#1E3A2F;border:none;border-radius:12px;padding:0 12px;font-size:16px;cursor:pointer;">⭐</button>
+                </div>
+            </div>
+            <div class="form-group"><label>مقدار :</label><input type="number" id="quantity" placeholder="2.5"></div>
+            <div class="flex"><button id="addBtn" style="flex:2">➕ اضافه</button><button id="cancelEditBtn" class="btn-secondary" style="flex:1; display:none;">لغو</button></div>
+        </div>
+
+        <h3>📋 لیست متریال‌ها</h3>
+        <div class="table-wrapper"><table id="itemsTable"><thead><tr><th>متریال</th><th>مقدار</th><th>واحد</th><th>قیمت واحد</th><th>هزینه</th><th></th></tr></thead><tbody id="tableBody"></tbody>}</table></div>
+        <div id="totalDisplay" class="total">💰 هزینه کل: 0 تومان</div>
+
+        <div class="flex">
+            <button id="calculateBtn">🧮 سود و فروش</button>
+            <button id="resetProjectBtn" class="btn-secondary">🗑️ پاک کردن</button>
+            <button id="exportCsvBtn" class="btn-success">📤 خروجی CSV</button>
+            <button id="importCsvBtn" class="btn-secondary">📥 ورود CSV</button>
+            <button id="printBtn" class="btn-secondary">🖨️ چاپ PDF</button>
+        </div>
+        <div id="resultArea" class="result"></div>
+        <input type="file" id="csvFileInput" accept=".csv" style="display:none;">
+    </div>
+
+    <div class="license-card">
+        <div><span id="licenseStatus">🔒 نسخه رایگان</span> <span id="licenseBadge" class="badge-free">رایگان</span></div>
+        <div class="license-input-group">
+            <input type="text" id="customerNameInput" placeholder="نام مشتری">
+            <input type="text" id="licenseCode" placeholder="کد فعال‌سازی">
+            <button id="unlockBtn" class="btn-success">فعال‌سازی</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div style="margin-bottom: 5px; line-height: 1.6;">
+            📞 پشتیبانی: <a href="tel:09155070802" style="color:#C9A03D;">09155070802</a> &nbsp;|&nbsp;
+            <a href="tel:09353330966" style="color:#C9A03D;">09353330966</a> &nbsp;|&nbsp;
+            📱 <a href="https://wa.me/989353330966" style="color:#C9A03D;">واتساپ</a> &nbsp;|&nbsp;
+            📱 <a href="https://t.me/khoshroo58" style="color:#C9A03D;">تلگرام</a> &nbsp;|&nbsp;
+            📱 <a href="https://ble.ir/khoshroo58" style="color:#C9A03D;">بله</a> &nbsp;|&nbsp;
+            ✉️ <a href="mailto:info@hesabyar.ir" style="color:#C9A03D;">info@hesabyar.ir</a>
+            <button class="help-btn" id="helpBtn" style="margin-right:10px;">📘 راهنما</button>
+        </div>
+        <div>تمامی حقوق محفوظ است · <strong>حساب یار</strong></div>
+    </div>
+</div>
+
+<div id="helpModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>📘 راهنمای سریع</h3>
+        <ul>
+            <li><strong>➕ اضافه کردن متریال:</strong> نام، واحد، قیمت واحد و مقدار را وارد کنید.</li>
+            <li><strong>📂 مدیریت پروژه:</strong> با دکمه‌های «جدید»، «کپی»، «تغییر نام» و «حذف» پروژه‌ها را مدیریت کنید.</li>
+            <li><strong>🧮 محاسبه سود:</strong> پس از وارد کردن متریال‌ها، دکمه «سود و فروش» را بزنید و درصد سود را وارد کنید.</li>
+            <li><strong>📤 خروجی CSV:</strong> برای استفاده در اکسل یا نرم‌افزار حسابداری.</li>
+            <li><strong>📥 ورود CSV:</strong> برای اضافه کردن انبوه متریال‌ها از فایل CSV.</li>
+            <li><strong>🖨️ چاپ PDF:</strong> خروجی قابل چاپ یا ذخیره به صورت PDF.</li>
+            <li><strong>🔐 فعال‌سازی:</strong> نام مشتری و کد فعال‌سازی را وارد کنید تا محدودیت ۵ آیتم برداشته شود.</li>
+        </ul>
+        <p style="margin-top:15px;">✨ برای پشتیبانی بیشتر با ما تماس بگیرید.</p>
+    </div>
+</div>
+
+<!-- ماشین حساب شناور -->
+<div id="calcPopup" style="display:none;position:fixed;bottom:80px;left:50%;transform:translateX(-50%);width:280px;background:#1E3A2F;border-radius:24px;box-shadow:0 8px 32px rgba(0,0,0,0.4);z-index:1000;padding:16px;user-select:none;">
+    <div id="calcHeader" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;cursor:grab;">
+        <span style="color:#C9A03D;font-weight:bold;">🧮 ماشین حساب</span>
+        <button id="calcClose" style="background:none;border:none;color:#C9A03D;font-size:20px;cursor:pointer;">×</button>
+    </div>
+    <div id="calcDisplay" style="background:#0A1F1A;color:#C9A03D;font-size:22px;text-align:left;padding:10px 14px;border-radius:12px;margin-bottom:10px;min-height:44px;word-break:break-all;direction:ltr;">0</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;">
+        <button class="calc-btn calc-op" data-val="C"  style="grid-column:span 2;">C</button>
+        <button class="calc-btn calc-op" data-val="⌫">⌫</button>
+        <button class="calc-btn calc-op" data-val="/">÷</button>
+        <button class="calc-btn" data-val="7">7</button>
+        <button class="calc-btn" data-val="8">8</button>
+        <button class="calc-btn" data-val="9">9</button>
+        <button class="calc-btn calc-op" data-val="*">×</button>
+        <button class="calc-btn" data-val="4">4</button>
+        <button class="calc-btn" data-val="5">5</button>
+        <button class="calc-btn" data-val="6">6</button>
+        <button class="calc-btn calc-op" data-val="-">−</button>
+        <button class="calc-btn" data-val="1">1</button>
+        <button class="calc-btn" data-val="2">2</button>
+        <button class="calc-btn" data-val="3">3</button>
+        <button class="calc-btn calc-op" data-val="+">+</button>
+        <button class="calc-btn" data-val="0" style="grid-column:span 2;">0</button>
+        <button class="calc-btn" data-val=".">.</button>
+        <button class="calc-btn calc-eq" data-val="=">=</button>
+    </div>
+    <button id="calcTransfer" style="width:100%;margin-top:10px;background:#C9A03D;color:#1E3A2F;border:none;border-radius:12px;padding:10px;font-weight:bold;cursor:pointer;font-size:14px;">↙️ انتقال به قیمت واحد</button>
+</div>
+
+<!-- مودال مدیریت فیوریت‌ها -->
+<div id="favModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:2000;align-items:center;justify-content:center;">
+    <div style="background:#FEFBF6;border-radius:24px;padding:20px;width:90%;max-width:400px;max-height:80vh;overflow-y:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+            <h3 style="margin:0;color:#1E3A2F;">⭐ مدیریت فیوریت‌ها</h3>
+            <button id="favModalClose" style="background:none;border:none;font-size:22px;cursor:pointer;">×</button>
+        </div>
+        <div id="favList" style="margin-bottom:14px;"></div>
+        <p style="font-size:12px;color:#888;text-align:center;">برای ذخیره فیوریت جدید، نام و قیمت واحد را پر کنید و دکمه ⭐ را بزنید.</p>
+    </div>
+</div>
+
+<style>
+.calc-btn { background:#2A4A3A; color:#E6D5A8; border:none; border-radius:10px; padding:12px 0; font-size:16px; cursor:pointer; transition:background 0.15s; }
+.calc-btn:active { background:#3A6A5A; }
+.calc-op { background:#C9A03D; color:#1E3A2F; font-weight:bold; }
+.calc-op:active { background:#E6B84D; }
+.calc-eq { background:#C9A03D; color:#1E3A2F; font-weight:bold; }
+.calc-eq:active { background:#E6B84D; }
+.fav-chip { display:inline-flex; align-items:center; gap:5px; background:#1E3A2F; color:#C9A03D; border:none; border-radius:20px; padding:5px 12px; font-size:12px; cursor:pointer; margin:3px; }
+.fav-chip:active { background:#2A5040; }
+</style>
+<div id="pdfRenderArea" style="position:fixed;left:-9999px;top:0;width:794px;background:#fff;padding:30px;font-family:'Noto Naskh Arabic','Droid Arabic Naskh','Tahoma',sans-serif;direction:rtl;color:#222;z-index:-1;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+    // ================= سیستم لایسنس (مثل قبل) =================
+    const SECRET_KEY = "HESABYAR2026@SECRET";
+    function simpleHash(str) { let h=0; for(let i=0;i<str.length;i++) { h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h).toString(16).toUpperCase(); }
+    function generateLicense(name) { return simpleHash(name.toUpperCase().trim() + SECRET_KEY).slice(0,16); }
+    function verifyLicense(name, code) { return generateLicense(name) === code.trim().toUpperCase(); }
+    
+    let isFullVersion = false;
+    function loadLicense() {
+        const saved = localStorage.getItem("hesabyar_license");
+        if(saved) { try { const data=JSON.parse(saved); if(verifyLicense(data.customer, data.code)) { isFullVersion=true; document.getElementById("licenseStatus").innerHTML="✅ نسخه کامل"; document.getElementById("licenseBadge").className="badge-pro"; document.getElementById("licenseBadge").innerHTML="نسخه کامل"; document.getElementById("limitWarning").style.display="none"; return; } } catch(e){} }
+        isFullVersion=false; document.getElementById("licenseStatus").innerHTML="🔒 نسخه رایگان"; document.getElementById("limitWarning").style.display="block";
+    }
+    function activateLicense() { const name=document.getElementById("customerNameInput").value.trim(); const code=document.getElementById("licenseCode").value.trim(); if(!name){alert("نام مشتری را وارد کن"); return;} if(verifyLicense(name,code)) { localStorage.setItem("hesabyar_license", JSON.stringify({customer:name, code:code})); alert("✅ فعال‌سازی موفق! صفحه دوباره بارگذاری می‌شود."); location.reload(); } else { alert("❌ کد یا نام اشتباه است"); } }
+    
+    const MAX_FREE=5;
+    function canAddMore(cur) { if(isFullVersion) return true; if(cur<MAX_FREE) return true; alert(`❌ نسخه رایگان فقط ${MAX_FREE} آیتم اجازه می‌دهد. برای حذف محدودیت فعال‌سازی کنید.`); return false; }
+    
+    // ================= مدیریت پروژه (مثل قبل) =================
+    let projects = {};
+    let currentProject = "";
+    let editMode = false, editIndex = -1;
+    
+    const STORAGE_KEY = "hesabyar_projects";
+    function saveAll() { localStorage.setItem(STORAGE_KEY, JSON.stringify(projects)); }
+    function loadAll() { const saved = localStorage.getItem(STORAGE_KEY); if(saved) { try { projects = JSON.parse(saved); } catch(e){} } if(Object.keys(projects).length===0) { projects = {"پروژه اصلی": {items: []}}; saveAll(); } currentProject = Object.keys(projects)[0]; }
+    
+    const projectSelect = document.getElementById("projectSelect");
+    const currentProjectNameSpan = document.getElementById("currentProjectName");
+    const matNameInput = document.getElementById("matName");
+    const unitSelect = document.getElementById("unit");
+    const unitPriceInput = document.getElementById("unitPrice");
+    const quantityInput = document.getElementById("quantity");
+    const addBtn = document.getElementById("addBtn");
+    const cancelEditBtn = document.getElementById("cancelEditBtn");
+    const tableBody = document.getElementById("tableBody");
+    const totalDisplay = document.getElementById("totalDisplay");
+    const calculateBtn = document.getElementById("calculateBtn");
+    const resetProjectBtn = document.getElementById("resetProjectBtn");
+    const newProjectBtn = document.getElementById("newProjectBtn");
+    const copyProjectBtn = document.getElementById("copyProjectBtn");
+    const renameProjectBtn = document.getElementById("renameProjectBtn");
+    const deleteProjectBtn = document.getElementById("deleteProjectBtn");
+    const exportCsvBtn = document.getElementById("exportCsvBtn");
+    const importCsvBtn = document.getElementById("importCsvBtn");
+    const csvFileInput = document.getElementById("csvFileInput");
+    const printBtn = document.getElementById("printBtn");
+    const resultArea = document.getElementById("resultArea");
+    const unlockBtn = document.getElementById("unlockBtn");
+    
+    function renderTable(items) {
+        tableBody.innerHTML = "";
+        for(let i=0; i<items.length; i++) {
+            const it = items[i];
+            const row = tableBody.insertRow();
+            row.insertCell(0).innerText = it.name;
+            row.insertCell(1).innerText = it.quantity;
+            let unitText = (it.unit === "m2") ? "متر مربع" : (it.unit === "meter") ? "متر طول" : "عدد";
+            row.insertCell(2).innerText = unitText;
+            row.insertCell(3).innerText = it.unitPrice.toLocaleString();
+            row.insertCell(4).innerText = it.cost.toLocaleString();
+            const actionCell = row.insertCell(5);
+            const editBtn = document.createElement("button"); editBtn.innerText = "✏️"; editBtn.className = "icon-btn";
+            editBtn.onclick = (function(idx) { return function() { startEdit(idx); }; })(i);
+            const delBtn = document.createElement("button"); delBtn.innerText = "❌"; delBtn.className = "icon-btn";
+            delBtn.onclick = (function(idx) { return function() { removeItem(idx); }; })(i);
+            actionCell.appendChild(editBtn); actionCell.appendChild(delBtn);
+        }
+    }
+    function removeItem(index) { projects[currentProject].items.splice(index,1); saveAll(); loadProjectToUI(); }
+    function updateTotal(items) { let total = items.reduce((s,it) => s+it.cost,0); totalDisplay.innerHTML = `💰 هزینه کل: ${total.toLocaleString()} تومان`; return total; }
+    function startEdit(index) {
+        const item = projects[currentProject].items[index];
+        if(!item) return;
+        editMode=true; editIndex=index;
+        matNameInput.value = item.name; unitSelect.value = item.unit; unitPriceInput.value = item.unitPrice; quantityInput.value = item.quantity;
+        addBtn.innerText = "✅ بروزرسانی"; cancelEditBtn.style.display = "inline-block";
+    }
+    function cancelEdit() { editMode=false; editIndex=-1; addBtn.innerText = "➕ اضافه"; cancelEditBtn.style.display = "none"; matNameInput.value=""; unitSelect.value="m2"; unitPriceInput.value=""; quantityInput.value=""; }
+    function addOrUpdate() {
+        if(!editMode && !isFullVersion) { const cur = projects[currentProject]?.items || []; if(!canAddMore(cur.length)) return; }
+        const name = matNameInput.value.trim(); const unit = unitSelect.value; const unitPrice = parseFloat(unitPriceInput.value); const quantity = parseFloat(quantityInput.value);
+        if(!name) { alert("نام متریال را وارد کن"); return; }
+        if(isNaN(unitPrice) || unitPrice <= 0) { alert("قیمت واحد معتبر"); return; }
+        if(isNaN(quantity) || quantity <= 0) { alert("مقدار معتبر"); return; }
+        const cost = unitPrice * quantity;
+        const newItem = { name, unit, unitPrice, quantity, cost };
+        if(editMode && editIndex>=0) { projects[currentProject].items[editIndex] = newItem; cancelEdit(); }
+        else { if(!projects[currentProject]) projects[currentProject] = { items: [] }; projects[currentProject].items.push(newItem); }
+        saveAll(); loadProjectToUI();
+        matNameInput.value = ""; unitPriceInput.value = ""; quantityInput.value = "";
+    }
+    function loadProjectToUI() {
+        if(!currentProject || !projects[currentProject]) return;
+        currentProjectNameSpan.innerText = `📁 پروژه: ${currentProject}`;
+        renderTable(projects[currentProject].items);
+        updateTotal(projects[currentProject].items);
+        resultArea.style.display = "none";
+        cancelEdit();
+    }
+    function showProfit() {
+        const items = projects[currentProject]?.items || [];
+        if(items.length===0) { alert("هیچ متریالی نیست"); return; }
+        const totalCost = updateTotal(items);
+        let percent = prompt("درصد سود (مثال: 30)", "30");
+        if(percent===null) return;
+        percent = parseFloat(percent);
+        if(isNaN(percent)) percent=30;
+        const profit = totalCost*(percent/100);
+        const finalPrice = totalCost+profit;
+        resultArea.style.display = "block";
+        resultArea.innerHTML = `<h3>💰 نتیجه</h3><p><strong>قیمت تمام شده:</strong> ${totalCost.toLocaleString()} تومان</p><p><strong>سود (${percent}%):</strong> ${profit.toLocaleString()} تومان</p><p style="font-size:1.3rem;"><strong>🏷️ قیمت فروش: ${finalPrice.toLocaleString()} تومان</strong></p>`;
+    }
+    function copyProject() { let newName = prompt("نام پروژه جدید", `کپی ${currentProject}`); if(!newName) return; if(projects[newName]) { alert("تکراری"); return; } projects[newName] = { items: JSON.parse(JSON.stringify(projects[currentProject].items)) }; saveAll(); updateProjectSelect(); currentProject = newName; projectSelect.value = currentProject; loadProjectToUI(); }
+    function newProject() { let name = prompt("نام پروژه جدید"); if(!name) return; if(projects[name]) { alert("وجود دارد"); return; } projects[name] = { items: [] }; saveAll(); updateProjectSelect(); currentProject = name; projectSelect.value = currentProject; loadProjectToUI(); }
+    function renameProject() { let newName = prompt("نام جدید:", currentProject); if(!newName) return; if(projects[newName]) { alert("تکراری"); return; } projects[newName] = projects[currentProject]; delete projects[currentProject]; currentProject = newName; saveAll(); updateProjectSelect(); projectSelect.value=currentProject; loadProjectToUI(); }
+    function deleteProject() { if(Object.keys(projects).length===1) { alert("آخرین پروژه قابل حذف نیست"); return; } if(confirm(`حذف ${currentProject}؟`)) { delete projects[currentProject]; currentProject = Object.keys(projects)[0]; saveAll(); updateProjectSelect(); projectSelect.value=currentProject; loadProjectToUI(); } }
+    function resetCurrent() { if(confirm(`همه متریال‌های ${currentProject} حذف شوند؟`)) { projects[currentProject].items = []; saveAll(); loadProjectToUI(); resultArea.style.display="none"; } }
+    function updateProjectSelect() { const keys = Object.keys(projects); projectSelect.innerHTML = ""; for(let name of keys) { let opt = document.createElement("option"); opt.value=name; opt.textContent=name; projectSelect.appendChild(opt); } if(currentProject && projects[currentProject]) projectSelect.value = currentProject; else if(keys.length) currentProject=keys[0]; }
+    function onProjectChange() { const selected = projectSelect.value; if(selected && projects[selected]) { currentProject = selected; loadProjectToUI(); } }
+    
+    function exportToCSV() { const items = projects[currentProject]?.items || []; if(items.length===0) { alert("هیچ داده‌ای نیست"); return; } let csvRows = [["نام","مقدار","واحد","قیمت واحد","هزینه"]]; for(let it of items) { let unitText = (it.unit==="m2")?"متر مربع":(it.unit==="meter")?"متر طول":"عدد"; csvRows.push([it.name, it.quantity, unitText, it.unitPrice, it.cost]); } const total = items.reduce((s,it)=>s+it.cost,0); csvRows.push(["جمع کل","","","",total]); const csvContent = csvRows.map(row => row.map(cell => `"${cell}"`).join(",")).join("\n"); const blob = new Blob(["\uFEFF"+csvContent], {type:"text/csv;charset=utf-8"}); const link = document.createElement("a"); const url = URL.createObjectURL(blob); link.href = url; link.download = `${currentProject}_hesabyar.csv`; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); alert("CSV گرفته شد."); }
+    function importCSV(file) { const reader = new FileReader(); reader.onload = function(e) { const lines = e.target.result.split(/\r?\n/); let newItems = []; for(let i=1; i<lines.length; i++) { const line = lines[i].trim(); if(!line) continue; const m = line.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g); if(!m || m.length<5) continue; let name = m[0].replace(/^"|"$/g,'').trim(); let qty = parseFloat(m[1].replace(/^"|"$/g,'')); let unitRaw = m[2].replace(/^"|"$/g,'').trim(); let price = parseFloat(m[3].replace(/^"|"$/g,'')); let cost = parseFloat(m[4].replace(/^"|"$/g,'')); if(isNaN(qty)||isNaN(price)||isNaN(cost)) continue; let unitKey = "piece"; if(unitRaw.includes("متر مربع")) unitKey="m2"; else if(unitRaw.includes("متر طول")) unitKey="meter"; newItems.push({ name, unit:unitKey, unitPrice:price, quantity:qty, cost }); } if(!newItems.length) { alert("هیچ آیتم معتبری یافت نشد"); return; } for(let it of newItems) projects[currentProject].items.push(it); saveAll(); loadProjectToUI(); alert(`${newItems.length} آیتم وارد شد.`); }; reader.readAsText(file,"UTF-8"); }
+    function onImportCsv() { csvFileInput.click(); }
+    csvFileInput.addEventListener("change", e => { if(e.target.files.length) importCSV(e.target.files[0]); csvFileInput.value=""; });
+    
+
+    // ========== ماشین حساب ==========
+    let calcExpr = '';
+    const calcDisplay = document.getElementById('calcDisplay');
+    const calcPopup = document.getElementById('calcPopup');
+
+    document.getElementById('calcToggleBtn').addEventListener('click', () => {
+        calcPopup.style.display = calcPopup.style.display === 'none' ? 'block' : 'none';
+    });
+    document.getElementById('calcClose').addEventListener('click', () => {
+        calcPopup.style.display = 'none';
+    });
+
+    document.querySelectorAll('.calc-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const v = btn.dataset.val;
+            if (v === 'C') { calcExpr = ''; calcDisplay.textContent = '0'; }
+            else if (v === '⌫') { calcExpr = calcExpr.slice(0,-1); calcDisplay.textContent = calcExpr || '0'; }
+            else if (v === '=') {
+                try {
+                    const result = Function('"use strict"; return (' + calcExpr + ')')();
+                    calcDisplay.textContent = parseFloat(result.toFixed(6)).toLocaleString();
+                    calcExpr = String(parseFloat(result.toFixed(6)));
+                } catch { calcDisplay.textContent = 'خطا'; calcExpr = ''; }
+            } else {
+                calcExpr += v;
+                calcDisplay.textContent = calcExpr;
+            }
+        });
+    });
+
+    document.getElementById('calcTransfer').addEventListener('click', () => {
+        const val = calcExpr ? Function('"use strict"; return (' + calcExpr + ')')() : 0;
+        document.getElementById('unitPrice').value = Math.round(val);
+        calcPopup.style.display = 'none';
+    });
+
+    // درگ ماشین حساب
+    const calcHeader = document.getElementById('calcHeader');
+    let isDragging = false, dragStartX, dragStartY, popupStartX, popupStartY;
+    calcHeader.addEventListener('touchstart', e => {
+        isDragging = true;
+        const t = e.touches[0];
+        dragStartX = t.clientX; dragStartY = t.clientY;
+        const rect = calcPopup.getBoundingClientRect();
+        popupStartX = rect.left; popupStartY = rect.top;
+        calcPopup.style.transform = 'none';
+        calcPopup.style.left = popupStartX + 'px';
+        calcPopup.style.bottom = 'auto';
+        calcPopup.style.top = popupStartY + 'px';
+    }, {passive:true});
+    document.addEventListener('touchmove', e => {
+        if (!isDragging) return;
+        const t = e.touches[0];
+        calcPopup.style.left = (popupStartX + t.clientX - dragStartX) + 'px';
+        calcPopup.style.top  = (popupStartY + t.clientY - dragStartY) + 'px';
+    }, {passive:true});
+    document.addEventListener('touchend', () => { isDragging = false; });
+
+    // ========== فیوریت‌ها ==========
+    let favorites = JSON.parse(localStorage.getItem('hesabyar_favorites') || '[]');
+
+    function saveFavorites() {
+        localStorage.setItem('hesabyar_favorites', JSON.stringify(favorites));
+    }
+
+    function renderFavoritesBar() {
+        const bar = document.getElementById('favoritesBar');
+        if (!favorites.length) { bar.innerHTML = ''; return; }
+        bar.innerHTML = '<div style="margin-bottom:6px;font-size:12px;color:#888;">⭐ پرمصرف‌ها (کلیک کن تا پر بشه):</div>' +
+            favorites.map((f,i) => `<button class="fav-chip" data-i="${i}">⭐ ${f.name} <span style="color:#E6D5A8;font-size:11px;">${f.unitPrice.toLocaleString()}</span></button>`).join('') +
+            `<button id="manageFavBtn" style="background:none;border:1px dashed #C9A03D;color:#C9A03D;border-radius:20px;padding:5px 10px;font-size:11px;cursor:pointer;margin:3px;">✏️ مدیریت</button>`;
+
+        bar.querySelectorAll('.fav-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                const f = favorites[chip.dataset.i];
+                document.getElementById('matName').value = f.name;
+                document.getElementById('unitPrice').value = f.unitPrice;
+                document.getElementById('unit').value = f.unit;
+            });
+        });
+        document.getElementById('manageFavBtn')?.addEventListener('click', openFavModal);
+    }
+
+    document.getElementById('saveFavBtn').addEventListener('click', () => {
+        const name = document.getElementById('matName').value.trim();
+        const price = parseFloat(document.getElementById('unitPrice').value);
+        const unit = document.getElementById('unit').value;
+        if (!name || !price) { alert('نام و قیمت واحد را وارد کنید'); return; }
+        const exists = favorites.findIndex(f => f.name === name);
+        if (exists >= 0) {
+            if (confirm(`"${name}" قبلاً ذخیره شده. قیمت به‌روز بشه؟`)) {
+                favorites[exists] = { name, unitPrice: price, unit };
+                saveFavorites(); renderFavoritesBar();
+                alert('✅ فیوریت به‌روز شد');
+            }
+        } else {
+            favorites.push({ name, unitPrice: price, unit });
+            saveFavorites(); renderFavoritesBar();
+            alert(`✅ "${name}" به فیوریت‌ها اضافه شد`);
+        }
+    });
+
+    function openFavModal() {
+        const modal = document.getElementById('favModal');
+        modal.style.display = 'flex';
+        renderFavModal();
+    }
+
+    function renderFavModal() {
+        const list = document.getElementById('favList');
+        if (!favorites.length) { list.innerHTML = '<p style="text-align:center;color:#888;">هنوز فیوریتی ندارید</p>'; return; }
+        list.innerHTML = favorites.map((f,i) => `
+            <div style="display:flex;align-items:center;justify-content:space-between;background:#F8F4ED;border-radius:12px;padding:10px 14px;margin-bottom:8px;">
+                <div>
+                    <div style="font-weight:bold;color:#1E3A2F;">${f.name}</div>
+                    <div style="font-size:12px;color:#888;">${f.unitPrice.toLocaleString()} تومان · ${f.unit==='m2'?'م.م':f.unit==='meter'?'متر':'عدد'}</div>
+                </div>
+                <div style="display:flex;gap:6px;">
+                    <button data-edit="${i}" style="background:#1E3A2F;color:#C9A03D;border:none;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px;">✏️ ویرایش</button>
+                    <button data-del="${i}" style="background:#c0392b;color:#fff;border:none;border-radius:8px;padding:5px 10px;cursor:pointer;font-size:12px;">🗑️</button>
+                </div>
+            </div>`).join('');
+
+        list.querySelectorAll('[data-del]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const i = parseInt(btn.dataset.del);
+                if (confirm(`حذف "${favorites[i].name}"؟`)) {
+                    favorites.splice(i, 1);
+                    saveFavorites(); renderFavoritesBar(); renderFavModal();
+                }
+            });
+        });
+        list.querySelectorAll('[data-edit]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const i = parseInt(btn.dataset.edit);
+                const f = favorites[i];
+                const newPrice = prompt(`قیمت جدید برای "${f.name}":`, f.unitPrice);
+                if (newPrice === null) return;
+                favorites[i].unitPrice = parseFloat(newPrice) || f.unitPrice;
+                saveFavorites(); renderFavoritesBar(); renderFavModal();
+            });
+        });
+    }
+
+    document.getElementById('favModalClose').addEventListener('click', () => {
+        document.getElementById('favModal').style.display = 'none';
+    });
+
+    // راهنما مودال
+    const modal = document.getElementById('helpModal');
+    const helpBtn = document.getElementById('helpBtn');
+    const closeSpan = document.querySelector('.close-modal');
+    if (helpBtn) { helpBtn.onclick = function() { modal.style.display = 'flex'; } }
+    if (closeSpan) { closeSpan.onclick = function() { modal.style.display = 'none'; } }
+    window.onclick = function(event) { if (event.target == modal) { modal.style.display = 'none'; } }
+    
+    addBtn.addEventListener("click", addOrUpdate);
+    cancelEditBtn.addEventListener("click", cancelEdit);
+    calculateBtn.addEventListener("click", showProfit);
+    resetProjectBtn.addEventListener("click", resetCurrent);
+    newProjectBtn.addEventListener("click", newProject);
+    
+    copyProjectBtn.addEventListener("click", copyProject);
+    renameProjectBtn.addEventListener("click", renameProject);
+    deleteProjectBtn.addEventListener("click", deleteProject);
+    exportCsvBtn.addEventListener("click", exportToCSV);
+    importCsvBtn.addEventListener("click", onImportCsv);
+    printBtn.addEventListener("click", downloadPDFImage);
+    projectSelect.addEventListener("change", onProjectChange);
+    unlockBtn.addEventListener("click", activateLicense);
+    quantityInput.addEventListener("keypress", (e) => { if(e.key === "Enter") addOrUpdate(); });
+    
+    loadAll(); loadLicense(); updateProjectSelect(); loadProjectToUI();
+    // ========== تابع دانلود PDF (جدول متنی) ==========
+async function downloadPDFImage() {
+    const items = projects[currentProject]?.items || [];
+    if(!items.length) { alert("متریالی وجود ندارد"); return; }
+
+    let percent = prompt("درصد سود برای PDF:", "30");
+    if(percent===null) return;
+    percent = parseFloat(percent);
+    if(isNaN(percent)) percent = 30;
+
+    const totalCost = items.reduce((s,it)=>s+it.cost,0);
+    const profit = totalCost*(percent/100);
+    const finalPrice = totalCost+profit;
+
+    // نمایش نتیجه در صفحه اصلی
+    resultArea.style.display = "block";
+    resultArea.innerHTML = `<h3>💰 نتیجه</h3>
+        <p><strong>قیمت تمام شده:</strong> ${totalCost.toLocaleString()} تومان</p>
+        <p><strong>سود (${percent}%):</strong> ${profit.toLocaleString()} تومان</p>
+        <p style="font-size:1.3rem;"><strong>🏷️ قیمت فروش: ${finalPrice.toLocaleString()} تومان</strong></p>`;
+
+    const loadingMsg = document.createElement("div");
+    loadingMsg.innerText = "در حال آماده‌سازی PDF...";
+    loadingMsg.style.cssText = "position:fixed;top:50%;left:50%;background:#1E3A2F;color:#C9A03D;padding:12px 24px;border-radius:40px;z-index:9999;transform:translate(-50%,-50%);font-weight:bold;";
+    document.body.appendChild(loadingMsg);
+
+    try {
+        // ساخت HTML جدول داخل div مخفی
+        const printDate = new Date().toLocaleDateString('fa-IR');
+        let rows = '';
+        items.forEach((it, idx) => {
+            const unitText = (it.unit==="m2")?"م.م":(it.unit==="meter")?"متر":"عدد";
+            const bg = idx%2===0 ? '#F8F4ED' : '#ffffff';
+            rows += `<tr style="background:${bg}">
+                <td style="padding:7px 8px;border:1px solid #ccc;">${it.name}</td>
+                <td style="padding:7px 8px;border:1px solid #ccc;text-align:center;">${it.quantity}</td>
+                <td style="padding:7px 8px;border:1px solid #ccc;text-align:center;">${unitText}</td>
+                <td style="padding:7px 8px;border:1px solid #ccc;text-align:center;">${it.unitPrice.toLocaleString()}</td>
+                <td style="padding:7px 8px;border:1px solid #ccc;text-align:center;">${it.cost.toLocaleString()}</td>
+            </tr>`;
+        });
+
+        const renderArea = document.getElementById('pdfRenderArea');
+        renderArea.innerHTML = `
+        <div style="background:#1E3A2F;color:#C9A03D;padding:16px 20px;border-radius:10px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:20px;font-weight:bold;">حساب یار</span>
+            <span style="font-size:12px;color:#E6D5A8;">پروژه: ${currentProject} &nbsp;|&nbsp; ${printDate}</span>
+        </div>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px;">
+            <thead>
+                <tr style="background:#DCE8E1;color:#1E3A2F;">
+                    <th style="padding:8px;border:1px solid #ccc;">نام متریال</th>
+                    <th style="padding:8px;border:1px solid #ccc;">مقدار</th>
+                    <th style="padding:8px;border:1px solid #ccc;">واحد</th>
+                    <th style="padding:8px;border:1px solid #ccc;">قیمت واحد</th>
+                    <th style="padding:8px;border:1px solid #ccc;">هزینه کل</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${rows}
+                <tr style="background:#E9E0D0;font-weight:bold;">
+                    <td colspan="4" style="padding:8px;border:1px solid #ccc;">جمع کل هزینه‌ها</td>
+                    <td style="padding:8px;border:1px solid #ccc;text-align:center;">${totalCost.toLocaleString()}</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="background:#FEF5E6;border:2px solid #C9A03D;border-radius:10px;padding:14px 18px;">
+            <p style="margin-bottom:7px;font-size:13px;">قیمت تمام شده: <strong>${totalCost.toLocaleString()} تومان</strong></p>
+            <p style="margin-bottom:7px;font-size:13px;">سود (${percent}%): <strong>${profit.toLocaleString()} تومان</strong></p>
+            <p style="font-size:15px;font-weight:bold;color:#1E3A2F;border-top:1px solid #C9A03D;padding-top:8px;margin-top:4px;">قیمت فروش: ${finalPrice.toLocaleString()} تومان</p>
+        </div>
+        <p style="text-align:center;font-size:11px;color:#999;margin-top:16px;">حساب یار · همراه هوشمند محاسبات</p>`;
+
+        renderArea.style.left = '-9999px';
+        renderArea.style.display = 'block';
+
+        await new Promise(r => setTimeout(r, 200));
+
+        const canvas = await html2canvas(renderArea, {
+            scale: 2,
+            backgroundColor: '#ffffff',
+            logging: false,
+            useCORS: false,
+            allowTaint: true,
+            width: 794
+        });
+
+        renderArea.style.left = '-9999px';
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.92);
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p','mm','a4');
+        const pW = 210, pH = 297;
+        const imgH = (canvas.height * pW) / canvas.width;
+
+        if(imgH <= pH) {
+            pdf.addImage(imgData,'JPEG',0,0,pW,imgH);
+        } else {
+            let pos = 0;
+            let first = true;
+            while(pos < imgH) {
+                if(!first) pdf.addPage();
+                pdf.addImage(imgData,'JPEG',0,-pos,pW,imgH);
+                pos += pH;
+                first = false;
+            }
+        }
+
+        try {
+            pdf.save(`hesabyar_${currentProject}.pdf`);
+            alert("✅ PDF ذخیره شد.");
+        } catch(e) {
+            const uri = pdf.output('datauristring');
+            const a = document.createElement('a');
+            a.href = uri;
+            a.download = `hesabyar_${currentProject}.pdf`;
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            alert("✅ PDF آماده شد.");
+        }
+    } catch(err) {
+        console.error(err);
+        alert("خطا: " + err.message);
+    } finally {
+        document.body.removeChild(loadingMsg);
+    }
+}
+</script>
+</body>
+</html>
